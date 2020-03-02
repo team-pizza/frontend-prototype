@@ -109,4 +109,10 @@ public class Group {
 		newMember.addGroup(this);
 	}
 	
+	
+	public void removeGroupMember(Account requested) {
+		groupMembers.removeElement(requested);
+		// The list is trimmed to its new size
+		groupMembers.trimToSize();
+	}
 }

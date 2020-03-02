@@ -65,10 +65,13 @@ class AccountTest {
 	void testAddGroup() {
 		// Initializes Test Data
 		Account test = new Account("Success");
-		Group testGroup = new Group(test, "Test1");
+		Group testGroup = new Group();
 		Vector<Group> testList = new Vector<Group>();
-		// Begins Testing
 		testList.addElement(testGroup);
+		
+		// Begins Testing
+		test.addGroup(testGroup);
+		
 		// Checks Results
 		assertEquals(testList, test.returnGroupList());
 	}

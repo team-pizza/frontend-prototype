@@ -4,8 +4,8 @@ import java.util.Vector;
 /**
  * Title: Database (Temp)
  * @author Paige Yon
- * Description: This class is used as a temporary substitute for the project's database class that will be implemented into the front-end development of B.A.S.
- * It currently holds a vector array of Groups and a vector array of Accounts
+ * Description: This class is used as a template for the project's database class that will be implemented into the front-end development of B.A.S.
+ * It currently holds a vector array of Groups and a vector array of Accounts.
  */
 public class Database {
 	// Holds  vector array of known Groups
@@ -34,7 +34,6 @@ public class Database {
 	 * This function, returnAccountList, returns a list of known Users in the database
 	 * @return userList | Vector<Account>
 	 */
-	// Returns list of known users in the database
 	public Vector<Account> returnAccountList() {	
 		return userList;
 	}
@@ -68,6 +67,24 @@ public class Database {
 	public void addGroup(Group group) {
 		groupList.addElement(group);
 		groupList.trimToSize();
+	}
+	
+	/**
+	 * This function, updateGroup, is used to update the inputed Group's information in the database
+	 * If the Group does not exist, an error is thrown
+	 * @param updatedGroup | Group
+	 */
+	public void updateGroup(Group updatedGroup) {
+		// If the Group is not found in the list, index = -1
+		// Otherwise, index equals the position of the first found instance
+		int index = this.returnGroupList().indexOf(updatedGroup);
+		// If Group is not found, this branch is used
+		if (index == -1) {
+			// When transferred to Front-End, this will be turned into a custom exception/toast message
+			System.out.println("Error: Group Does Not Exist in Database");
+		}else { // User's information is updated
+			groupList.set(index, updatedGroup);
+		}
 	}
 	
 	/**
@@ -122,7 +139,6 @@ public class Database {
 	 * @param requested | Account
 	 * @return requestedAccount | Account
 	 */
-	// Might change to grab accounts based on strings
 	public Account returnUser(Account requested) {
 		// If the Account is not found in the list, index = -1
 		// Otherwise, index equals the position of the first found instance
@@ -136,4 +152,13 @@ public class Database {
 		}
 	}
 	
+	// Override function for returnUser
+	public Account returnUser(String email) {
+		for(int i =0; i < this.userList.size(); i++) {
+			if(this.userList.elementAt(i).returnName().equals(email)) {
+				return this.userList.elementAt(i);
+			}
+		}
+		return null;
+	}
 }

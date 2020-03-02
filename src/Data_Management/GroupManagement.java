@@ -4,11 +4,13 @@ import Objects.Group;
 import java.util.Vector;
 import Objects.Account;
 import Objects.Database;
+// For the console prototype only
+import java.util.Scanner;
 
 /**
  * Title: GroupManagement
  * Description: The class is used to manage Group data sent from the database
- * Currently this class can delete the Group data from the database
+ * Currently this class can delete the Group data from the database, invite new members to a Group, and have a member leave the group
  * @author Paige Yon
  */
 public class GroupManagement {
@@ -53,7 +55,7 @@ public class GroupManagement {
 	 * @param requestor | Account
 	 * @param requestedGroup | Group
 	 */
-	public void DeleteGroup(Account requestor, Group requestedGroup) {
+	public void deleteGroup(Account requestor, Group requestedGroup) {
 		// Sets the GroupManagement object's group to the requested group if the param object and internal Group object are not a match
 		if(!requestedGroup.returnGroupName().contentEquals(group.returnGroupName())) {
 			this.setGroup(requestedGroup);
@@ -73,8 +75,122 @@ public class GroupManagement {
 			// When transferred to Front-End, this will be turned into a custom exception/toast message
 			System.out.println("Error: User does not have Admin permission. Request Denied ");
 		}
-		
 	}
+	
+	public void leaveGroup(Account requestor, Group requestedGroup) {
+		// Sets the GroupManagement object's group to the requested group if the param object and internal Group object are not a match
+		if(!requestedGroup.returnGroupName().contentEquals(group.returnGroupName())) {
+			this.setGroup(requestedGroup);
+		}		
+		
+		// For this console prototype only, the input is received through the scanner
+		System.out.println("Are you sure you want to leave " + this.group.returnGroupName() + "?");
+		char results = this.checkInput(requestedGroup);
+		
+		if (results == 'Y' || results == 'y') {
+			if(this.CheckOwner(requestor.returnName())==true) {
+				//If the owner is the only member in the group, the group is deleted
+				if(this.group.returnMemberList().size() == 1) {
+					this.deleteGroup(requestor, requestedGroup);
+				}
+				else {	// Plans later to have the owner pass on the ownership manually
+					// If the Account is not found in the list, index = -1
+					// Otherwise, index equals the position of the first found instance
+					int index = this.group.returnMemberList().indexOf(requestor);
+					int groupSize = this.group.returnMemberList().size();
+					// If the Account is the last in the vector array, the account before it is chosen as the new owner
+					if(index == groupSize - 1) {
+						Account newOwner = this.group.returnMemberList().elementAt(groupSize - 2);
+						this.group.setOwner(newOwner.returnName());
+					}
+					else {// Otherwise the account after the requestor in the list is chosen
+						Account newOwner = this.group.returnMemberList().elementAt(index + 1);
+						this.group.setOwner(newOwner.returnName());
+					}
+					requestor.removeGroup(requestedGroup);
+					this.group.removeGroupMember(requestor);
+					this.database.updateUser(requestor);
+					this.database.updateGroup(requestedGroup);
+				}
+			}
+			else {
+				requestor.removeGroup(requestedGroup);
+				this.group.removeGroupMember(requestor);
+				this.database.updateUser(requestor);
+				this.database.updateGroup(requestedGroup);
+			}
+			System.out.println("You have left " + requestedGroup.returnGroupName() + ".");		
+		} 
+		else {
+			System.out.println("Request cancelled.");
+		}
+	}
+	
+	public void inviteNewMember(Account requestor, Group requestedGroup, String newMemberEmail) {
+		// Sets the GroupManagement object's group to the requested group if the param object and internal Group object are not a match
+		if(!requestedGroup.returnGroupName().contentEquals(group.returnGroupName())) {
+			this.setGroup(requestedGroup);
+		}	
+		
+		Account newMember = this.database.returnUser(newMemberEmail);
+		if(newMember == null) {
+			System.out.println("Does " + newMemberEmail + "accept " + this.group.returnGroupName() + " invitation?");
+			completeInvitationProcess(this.group, newMemberEmail, newMember, this.database);
+		}
+		else {
+			int index = this.group.returnMemberList().indexOf(newMember);
+			if(index != -1) {
+				System.out.println("Error: The requested user is already a member. ");
+			}
+			else {
+				System.out.println(newMemberEmail + " is invited to join " + requestedGroup.returnGroupName() + ".");
+				System.out.println("Does " + newMemberEmail + "accept " + this.group.returnGroupName() + " invitation?");
+				completeInvitationProcess(this.group, newMemberEmail, newMember, this.database);
+			}
+		}
+	}
+	
+	/* * * Private Functions * * */
+	// For the console prototype only
+	private char checkConfirmation(char result, Scanner input) {
+		char confirmation = result;
+		while(confirmation != 'Y' || confirmation != 'y' || confirmation != 'N' || confirmation != 'n') {
+			System.out.println("Please enter valid input [Y/N]: ");
+			confirmation = input.next().charAt(0);
+		}
+		return confirmation;
+	}
+	
+	// For the console prototype only
+	private char checkInput(Group requestedGroup) {
+		// For this console prototype only, the input is received through the scanner
+		Scanner user = new Scanner(System.in);
+		char input = user.next().charAt(0);
+		char results = checkConfirmation(input, user);
+		user.close();
+		return results;
+	}
+	
+	// Possibly for the console prototype only
+	private void completeInvitationProcess(Group requestedGroup, String newMemberEmail, Account newMember, Database data) {
+		char results = this.checkInput(requestedGroup);
+		if (results == 'Y' || results == 'y') {
+			if(newMember != null) {
+				requestedGroup.addGroupMember(newMember);
+			}
+			else {
+				// In the future, there will be a verification method for creating new Account
+				System.out.println("Registering your email with database...");
+				System.out.println("Creating account...");
+				newMember = new Account(newMemberEmail);
+				requestedGroup.addGroupMember(newMember);
+				data.addUser(newMember);
+				data.updateGroup(requestedGroup);
+			}
+			System.out.println(newMemberEmail + " is a now a member of the " + requestedGroup.returnGroupName() + " Group.");
+		}
+	}
+	
 	
 	/*
 	 * This private function, CheckOwner, is used to check in the passed in gmail string to the Group's current owner string
@@ -105,6 +221,7 @@ public class GroupManagement {
 		// Updates the group's information in the database
 		groupMembers.forEach(member->data.updateUser(member));
 	}
+	
 	
 	/*
 	 * This private function, deletes the Group's data from the database

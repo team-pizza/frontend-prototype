@@ -25,6 +25,7 @@ class GroupTest {
 		// Initialize Data
 		Group newGroup = new Group();
 		
+		// Check Results
 		assertEquals("", newGroup.returnGroupName());
 		assertEquals("", newGroup.returnOwner());
 	}

@@ -97,7 +97,7 @@ class GroupManagementTest {
 		
 		// Begins Testing
 		GroupManagement manager = new GroupManagement(deleteGroup, data);
-		manager.DeleteGroup(testOwner, deleteGroup);
+		manager.deleteGroup(testOwner, deleteGroup);
 		
 		// Checks Results; Ensures deleteGroup's data does not exist in database
 		assertEquals(null, manager.returnGroup());
@@ -125,7 +125,7 @@ class GroupManagementTest {
 		Group deleteGroup = new Group(testOwner2, "DeleteMe");
 		deleteGroup.addGroupMember(testOwner1);
 		
-		// Sets up database
+		// Sets up database/
 		Database data = new Database();
 		data.addGroup(newGroup);
 		data.addGroup(deleteGroup);
@@ -134,7 +134,7 @@ class GroupManagementTest {
 		
 		// Begins Testing
 		GroupManagement manager = new GroupManagement(newGroup, data);
-		manager.DeleteGroup(testOwner2, deleteGroup);
+		manager.deleteGroup(testOwner2, deleteGroup);
 		
 		
 		// Checks Results; Ensures deleteGroup's data does not exist in database
@@ -162,7 +162,7 @@ class GroupManagementTest {
 		
 		//Begins testing
 		GroupManagement manager = new GroupManagement(newGroup, data);
-		manager.DeleteGroup(testMember, newGroup);
+		manager.deleteGroup(testMember, newGroup);
 		
 		// Checks Results; newGroup should not be deleted
 		assertEquals(newGroup, manager.returnGroup());
@@ -183,7 +183,7 @@ class GroupManagementTest {
 		
 		// Begins Testing
 		GroupManagement manager = new GroupManagement(oldGroup, data);
-		manager.DeleteGroup(testMember, newGroup);
+		manager.deleteGroup(testMember, newGroup);
 		
 		// Checks Results; newGroup should not be deleted
 		assertNotEquals(oldGroup, manager.returnGroup());

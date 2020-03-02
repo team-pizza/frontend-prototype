@@ -4,7 +4,7 @@ import java.util.Vector;
 /**
  * Title: Account (Temp)
  * @author Paige Yon
- * Description: This class is used as a temporary substitute for the user account class that will be implemented into the front-end development of B.A.S.
+ * Description: This class is used as a template for the user account class that will be implemented into the front-end development of B.A.S.
  * It currently holds user's name (google email) and list of groups associated with their account
  */
 public class Account {
