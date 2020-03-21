@@ -4,8 +4,6 @@ import Objects.Group;
 import java.util.Vector;
 import Objects.Account;
 import Objects.Database;
-// For the console prototype only
-import java.util.Scanner;
 
 /**
  * Title: GroupManagement
@@ -77,7 +75,7 @@ public class GroupManagement {
 		}
 	}
 	
-	public void leaveGroup(Account requestor, Group requestedGroup) {
+	public void leaveGroup(Account requestor, Group requestedGroup, char response) {
 		// Sets the GroupManagement object's group to the requested group if the param object and internal Group object are not a match
 		if(!requestedGroup.returnGroupName().contentEquals(group.returnGroupName())) {
 			this.setGroup(requestedGroup);
@@ -85,7 +83,7 @@ public class GroupManagement {
 		
 		// For this console prototype only, the input is received through the scanner
 		System.out.println("Are you sure you want to leave " + this.group.returnGroupName() + "?");
-		char results = this.checkInput(requestedGroup);
+		char results = response;
 		
 		if (results == 'Y' || results == 'y') {
 			if(this.CheckOwner(requestor.returnName())==true) {
@@ -126,7 +124,7 @@ public class GroupManagement {
 		}
 	}
 	
-	public void inviteNewMember(Account requestor, Group requestedGroup, String newMemberEmail) {
+	public void inviteNewMember(Account requestor, Group requestedGroup, String newMemberEmail, char response) {
 		// Sets the GroupManagement object's group to the requested group if the param object and internal Group object are not a match
 		if(!requestedGroup.returnGroupName().contentEquals(group.returnGroupName())) {
 			this.setGroup(requestedGroup);
@@ -135,7 +133,7 @@ public class GroupManagement {
 		Account newMember = this.database.returnUser(newMemberEmail);
 		if(newMember == null) {
 			System.out.println("Does " + newMemberEmail + "accept " + this.group.returnGroupName() + " invitation?");
-			completeInvitationProcess(this.group, newMemberEmail, newMember, this.database);
+			completeInvitationProcess(this.group, newMemberEmail, newMember, this.database, response);
 		}
 		else {
 			int index = this.group.returnMemberList().indexOf(newMember);
@@ -145,35 +143,15 @@ public class GroupManagement {
 			else {
 				System.out.println(newMemberEmail + " is invited to join " + requestedGroup.returnGroupName() + ".");
 				System.out.println("Does " + newMemberEmail + "accept " + this.group.returnGroupName() + " invitation?");
-				completeInvitationProcess(this.group, newMemberEmail, newMember, this.database);
+				completeInvitationProcess(this.group, newMemberEmail, newMember, this.database, response);
 			}
 		}
 	}
 	
 	/* * * Private Functions * * */
-	// For the console prototype only
-	private char checkConfirmation(char result, Scanner input) {
-		char confirmation = result;
-		while(confirmation != 'Y' || confirmation != 'y' || confirmation != 'N' || confirmation != 'n') {
-			System.out.println("Please enter valid input [Y/N]: ");
-			confirmation = input.next().charAt(0);
-		}
-		return confirmation;
-	}
-	
-	// For the console prototype only
-	private char checkInput(Group requestedGroup) {
-		// For this console prototype only, the input is received through the scanner
-		Scanner user = new Scanner(System.in);
-		char input = user.next().charAt(0);
-		char results = checkConfirmation(input, user);
-		user.close();
-		return results;
-	}
-	
 	// Possibly for the console prototype only
-	private void completeInvitationProcess(Group requestedGroup, String newMemberEmail, Account newMember, Database data) {
-		char results = this.checkInput(requestedGroup);
+	private void completeInvitationProcess(Group requestedGroup, String newMemberEmail, Account newMember, Database data, char response) {
+		char results = response;
 		if (results == 'Y' || results == 'y') {
 			if(newMember != null) {
 				requestedGroup.addGroupMember(newMember);

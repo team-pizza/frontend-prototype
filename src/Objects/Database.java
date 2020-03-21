@@ -97,6 +97,25 @@ public class Database {
 	}
 	
 	/**
+	 * This function, returnGroup, is used to return a Group's information from the database list
+	 * It is currently used more for testing purposes
+	 * @param requested | Group
+	 * @return requestedGroup | Group
+	 */
+	public Group returnGroup(Group requested) {
+		// If the Group is not found in the list, index = -1
+		// Otherwise, index equals the position of the first found instance
+		int index = groupList.indexOf(requested);
+		if (index == -1) {
+			// When transferred to Front-End, this will be turned into a custom exception/toast message
+			System.out.println("Error: User Does Not Exist in Database");
+			return null;
+		}else { // Returns requested Group data
+			return groupList.elementAt(index);
+		}
+	}
+	
+	/**
 	 * This function, addAccount, is used to add a requested Account to the database 
 	 * @param user | Account
 	 */

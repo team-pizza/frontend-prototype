@@ -109,7 +109,10 @@ public class Group {
 		newMember.addGroup(this);
 	}
 	
-	
+	/**
+	 * This function, removeGroupMember, is used to remove an existing account from the group's member list
+	 * @param newMember | Account
+	 */
 	public void removeGroupMember(Account requested) {
 		groupMembers.removeElement(requested);
 		// The list is trimmed to its new size

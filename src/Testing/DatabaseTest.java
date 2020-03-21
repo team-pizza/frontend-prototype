@@ -89,6 +89,63 @@ class DatabaseTest {
 		// Checks Results
 		assertEquals(groups, testData.returnGroupList());
 	}
+	
+	/**
+	 * This function, testReturnGroup, is used to test the Database's returnGroup function
+	 */
+	@Test
+	void testReturnGroup() {
+		// Initializes Test Data using empty Group objects
+		Group mainTestGroup1= new Group();
+		Group mainTestGroup2 = new Group();
+		Group mainTestGroup3 = new Group();
+		
+		// Creates Group List for expected outcome
+		Vector<Group> groups = new Vector<Group>();
+		groups.addElement(mainTestGroup1);
+		groups.addElement(mainTestGroup2);
+		groups.addElement(mainTestGroup3);
+		
+		// Begins Testing
+		Database testData = new Database();
+		testData.setGroupList(groups);
+		
+		// Checks Results; Makes sure it can return each Account object when called
+		assertEquals(mainTestGroup1, testData.returnGroup(mainTestGroup1));
+		assertEquals(mainTestGroup2, testData.returnGroup(mainTestGroup2));
+		assertEquals(mainTestGroup3, testData.returnGroup(mainTestGroup3));
+	}
+	
+	/**
+	 * This function, testUpdateGroup, is used to test the Database's updateGroup function
+	 */
+	@Test
+	void testUpdateGroup() {
+		// Initializes Test Data
+		Account mainTestUser = new Account("User");
+		Group mainTestGroup = new Group(mainTestUser, "TestGroup");
+		Account mainTestUser1 = new Account("TestUser1");
+		Account mainTestUser2 = new Account("TestUser2");
+		Account mainTestUser3 = new Account("TestUser3");
+		
+		// Sets up Database
+		Database testData = new Database();
+		testData.addUser(mainTestUser);
+		testData.addUser(mainTestUser1);
+		testData.addUser(mainTestUser2);
+		testData.addUser(mainTestUser3);
+		testData.addGroup(mainTestGroup);
+		
+		// Begins Testing
+		mainTestGroup.removeGroupMember(mainTestUser2);
+		testData.updateGroup(mainTestGroup);
+		
+		// Checks Results; Ensures that MainTestGroup no longer has mainTestUser2
+		// Also checks to make sure user exists in database still
+		assertEquals(-1, testData.returnGroup(mainTestGroup).returnMemberList().indexOf(mainTestUser2));
+		assertNotEquals(-1, testData.returnAccountList().indexOf(mainTestUser2));
+	}
+	
 
 	/**
 	 * This function, testRemoveGroup, is used to test the Database's removeGroup function

@@ -164,5 +164,40 @@ class GroupTest {
 		assertNotEquals(-1, newGroup.returnMemberList().indexOf(newMember));
 		assertNotEquals(-1, newMember.returnGroupList().indexOf(newGroup));
 	}
+	
+	/**
+	 * This function, testRemoveMember, is used to test the Group's removeGroupMember function
+	 */
+	@Test
+	void testRemoveMember() {
+		// Initializes Test Data
+		Account testOwner = new Account("Owner");
+		Group testGroup = new Group(testOwner, "Test");
+		
+		// Builds list to use for checking results
+		Vector<Account> testList = new Vector<Account>();
+		Account testMember1 = new Account("Test1");
+		Account testMember2 = new Account("Test2");
+		Account testMember3 = new Account("Test3");
+		
+		// Adds groups to Vector array
+		testList.addElement(testMember1);
+		testList.addElement(testMember2);
+		testList.addElement(testMember3);
+		
+		//Add members to Group
+		testGroup.addGroupMember(testMember1);
+		testGroup.addGroupMember(testMember2);
+		testGroup.addGroupMember(testMember3);
+		
+		// Begins Test
+		testGroup.removeGroupMember(testMember2);
+		
+		// Checks Results; Must remove testGroup2 from list
+		assertNotEquals(testGroup.returnMemberList(), testList);
+		assertNotEquals(-1, testGroup.returnMemberList().indexOf(testMember1));
+		assertNotEquals(-1, testGroup.returnMemberList().indexOf(testMember3));
+		assertEquals(-1, testGroup.returnMemberList().indexOf(testMember2));
+	}
 
 }
