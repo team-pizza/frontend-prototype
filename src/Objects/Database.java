@@ -171,7 +171,12 @@ public class Database {
 		}
 	}
 	
-	// Override function for returnUser
+	/**
+	 * This override function, returnUser, is used to return a user's account information from the database list using an email
+	 * It is currently used more for testing purposes
+	 * @param email | String
+	 * @return requestedAccount | Account
+	 */
 	public Account returnUser(String email) {
 		for(int i =0; i < this.userList.size(); i++) {
 			if(this.userList.elementAt(i).returnName().equals(email)) {

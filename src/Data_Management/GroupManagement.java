@@ -75,6 +75,14 @@ public class GroupManagement {
 		}
 	}
 	
+	/**
+	 * This function, leaveGroup, is used for the requested member to leave the inputed Group
+	 * If the request is from the Group's owner's account, a new Owner will be chosen. Otherwise, only the requested will be affected.
+	 * For the prototype purposes, the response is inputed manually.
+	 * @param requestor | Account
+	 * @param requestedGroup | Group
+	 * @param response | char
+	 */
 	public void leaveGroup(Account requestor, Group requestedGroup, char response) {
 		// Sets the GroupManagement object's group to the requested group if the param object and internal Group object are not a match
 		if(!requestedGroup.returnGroupName().contentEquals(group.returnGroupName())) {
@@ -124,6 +132,18 @@ public class GroupManagement {
 		}
 	}
 	
+	/**
+	 * This function, inviteNewMember, is used for the requested member to invite a new member to a Group using their email
+	 * If the email is tied to an existing account, that account is updated to include the Group in their list upon receiving a confirmation from the account about joining
+	 * If the email is tied to an existing member, the request is disbanded.
+	 * If the email is not tied to an existing member or account, a new account is created upon the invited saying yes.
+	 * If the invited say no, the request is disbanded.
+	 * For the prototype purposes, the response is inputed manually.
+	 * @param requestor | Account
+	 * @param requestedGroup | Group
+	 * @param newMemberEmail | String
+	 * @param response | char
+	 */
 	public void inviteNewMember(Account requestor, Group requestedGroup, String newMemberEmail, char response) {
 		// Sets the GroupManagement object's group to the requested group if the param object and internal Group object are not a match
 		if(!requestedGroup.returnGroupName().contentEquals(group.returnGroupName())) {
@@ -149,6 +169,9 @@ public class GroupManagement {
 	}
 	
 	/* * * Private Functions * * */
+	/*
+	 * This private function, completedInviationProcess, is used to completed the Invitation process for new Accounts
+	 */
 	// Possibly for the console prototype only
 	private void completeInvitationProcess(Group requestedGroup, String newMemberEmail, Account newMember, Database data, char response) {
 		char results = response;
